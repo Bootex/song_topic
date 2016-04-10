@@ -4,12 +4,15 @@ from bs4 import BeautifulSoup
 
 def gaon_top_rank(year, week) :
     """
+    # 샘플 리스트
     y_li = range(2010, 2016+1)       # y_li[5] = 2015
     w_li = range(1,52+1)             # w_li[45] = 46
     year = str(y_li[5])
     week = str(w_li[43])
     """
     print(year, week)
+    year = str(year)
+    week = str(week)
     url = "http://www.gaonchart.co.kr/main/section/chart/online.gaon?nationGbn=T&serviceGbn=ALL&targetTime=%s&hitYear=%s&termGbn=week"  %(week, year)
     res = requests.get(url)
     #print (res.text)
@@ -47,7 +50,7 @@ def gaon_top_rank(year, week) :
         href = str(soup3.select('a')[0]).strip()
         gaon_company_id = list(href.split('"'))[1]      # 가온차트 내 회사코드
         gaon_album_id = list(href.split('"'))[3]        # 가온차트 내 앨범코드
-        """
+
         ### 멜론 앨범id 수집
         url2 = 'http://www.gaonchart.co.kr/main/section/chart/ReturnUrl.gaon?serviceGbn=ALL&seq_company=3715&seq_mom=%s' %(str(gaon_album_id))
         res2 = requests.get(url2)
@@ -59,7 +62,9 @@ def gaon_top_rank(year, week) :
         print(title,"\t", artist,"\t", album,"\t", pro,"\t", dist,"\t", rank,"\t", gaon_company_id,"\t", gaon_album_id,"\t",melon_album_id)
         gaon_li = [title, artist, album, pro, dist, rank, gaon_company_id, gaon_album_id, melon_album_id]
         """
+        ## 멜론 앨범id 수집 무시
         print(title,"\t", artist,"\t", album,"\t", pro,"\t", dist,"\t", rank,"\t", gaon_company_id,"\t", gaon_album_id)
         gaon_li = [title, artist, album, pro, dist, rank, gaon_company_id, gaon_album_id]
+        """
         top_rank.append(gaon_li)
     return top_rank

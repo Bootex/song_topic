@@ -1,5 +1,5 @@
 from flask import Flask
-from seolab import parsing
+from seolab import gaon_chart
 import json
 app = Flask(__name__)
 
@@ -8,10 +8,15 @@ app = Flask(__name__)
 def hello_world():
     return 'Hello World!'
 
-@app.route('/seolab/')
-def se():
-    result = parsing.test(3)
-    return str(result)
+
+@app.route('/seolab/<year>/<week>')
+def se(year,week):
+    if year and week:
+        result = gaon_chart.gaon_top_rank(year,week)
+        return json.dumps(result,ensure_ascii='False')
+    else:
+        return "error value"
+
 
 @app.route('/json')
 def jso():
@@ -19,4 +24,4 @@ def jso():
     return json.dumps(a,ensure_ascii=False)
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0',debug=True,port=8000)
+    app.run(host='0.0.0.0', debug=True, port=8000)
