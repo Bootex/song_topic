@@ -1,0 +1,3 @@
+It is our project to extract meaningful topic in public songs data like singer, lyrics, rank, etc...
+Our team member consist of brother's unit.
+By Seolab and bootex.
