@@ -1,6 +1,5 @@
 from pymongo import MongoClient
 
-
 class MONGO_MANAGER:  # DB manage class
     def __init__(self, db_type, db_name):
         if db_type == "mongo":
@@ -30,20 +29,22 @@ class MONGO_MANAGER:  # DB manage class
 import requests as rq
 import json
 
-year,week_set = "2016", [i for i in range(1,15)]
+if __name__ == "__main__":
+    year,week_set = "2016", [i for i in range(1,15)]
+    manager = MONGO_MANAGER(db_type="mongo",db_name="song")
 
-manager = MONGO_MANAGER(db_type="mongo",db_name="song")
+    for week in week_set:
+        if len(str(week)) == 1: week = "0"+ str(week)
 
-for week in week_set:
-    req = rq.get("http://data.bootex.xyz:8000/seolab/%s/%s" % (year,str(week)))
+        req = rq.get("http://data.bootex.xyz:8000/seolab/%s/%s" % (year,str(week)))
 
-    print(req.text)
-    gaon_chart = req.json()
+        print(req.text)
+        gaon_chart = req.json()
 
-    b = ['name','singer','album','company','circulation','rank','play','song_id']
+        b = ['name','singer','album','company','circulation','rank','play','song_id']
 
-    for i in gaon_chart:
-        row = dict(zip(b,i))
-        row["year"],row["week"] = year,week
-        manager.insert("gaon_list",row)
-        print(row)
+        for i in gaon_chart:
+            row = dict(zip(b,i))
+            row["year"],row["week"] = year,week
+            manager.insert("gaon_list",row)
+            print(year,week,"  ",row)
