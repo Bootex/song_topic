@@ -1,5 +1,7 @@
 from flask import Flask
 from seolab import gaon_chart
+from melon import gaon_to_melon
+
 import json
 app = Flask(__name__)
 
@@ -17,6 +19,13 @@ def se(year,week):
     else:
         return "error value"
 
+@app.route('/seolab/gaon_<ga_id>')
+def get_melon_album(ga_id):
+    try:
+        result = gaon_to_melon.ga_mel(gaon_id=ga_id)
+        return result
+    except:
+        return "error value"
 
 @app.route('/json')
 def jso():
