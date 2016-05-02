@@ -40,5 +40,5 @@ melon_album_id = list(res2.url.split("="))[1]
 if melon_album_id.count('%') > 0 :
     melon_album_id = melon_album_id.split('%')[0]
 print(melon_album_id)
-url3 = 'http://www.melon.com/album/detail.htm?albumId=%s' %(str(melon_album_id))
+url3 = 'http://www.muse.com/album/detail.htm?albumId=%s' %(str(melon_album_id))
 print(url3)

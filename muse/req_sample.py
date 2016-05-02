@@ -10,7 +10,7 @@ def req_sample():
 
 
 def req_melon():
-    url = "http://www.melon.com/album/detail.htm?albumId=2676884"
+    url = "http://www.muse.com/album/detail.htm?albumId=2676884"
 
     req = requests.get(url)
     return BeautifulSoup(req.text)
@@ -22,7 +22,7 @@ def req_melon():
 
 from selenium import webdriver
 
-url = "http://www.melon.com/album/detail.htm?albumId=2676884"
+url = "http://www.muse.com/album/detail.htm?albumId=2676884"
 PROXY = "127.0.0.1:8118" # IP:PORT or HOST:PORT
 fb_profile = webdriver.FirefoxProfile
 fb_profile

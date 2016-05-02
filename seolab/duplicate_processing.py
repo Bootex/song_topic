@@ -1,5 +1,5 @@
 from pymongo import MongoClient
-from melon.mongo_man import MONGO_MANAGER
+from muse.mongo_man import MONGO_MANAGER
 
 client = MongoClient("mongodb://data.bootex.xyz:27017")
 
