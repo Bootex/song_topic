@@ -1,6 +1,6 @@
 from flask import Flask
 from seolab import gaon_chart
-from melon import gaon_to_melon
+from muse import gaon_to_melon
 
 import json
 app = Flask(__name__)
@@ -24,6 +24,7 @@ def get_melon_album(ga_id):
     try:
         result = gaon_to_melon.ga_mel(gaon_id=ga_id)
         return result
+
     except:
         return "error value"
 
@@ -31,6 +32,8 @@ def get_melon_album(ga_id):
 def jso():
     a = [1,2,3,4,5]
     return json.dumps(a,ensure_ascii=False)
+
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', debug=True, port=8000)

@@ -59,7 +59,7 @@ def gaon_top_rank(year, week) :
         if melon_album_id.count('%') > 0 :
             melon_album_id = melon_album_id.split('%')[0]
 
-        url3 = 'http://www.melon.com/album/detail.htm?albumId=%s' %(str(melon_album_id))
+        url3 = 'http://www.muse.com/album/detail.htm?albumId=%s' %(str(melon_album_id))
         '''
         #print(title,"\t", artist,"\t", album,"\t", pro,"\t", dist,"\t", rank,"\t", gaon_company_id,"\t", gaon_album_id,"\t",melon_album_id)
 
