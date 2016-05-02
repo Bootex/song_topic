@@ -90,5 +90,5 @@ if __name__ == "__main__":
             print("----------------------\n\n\n\n")
             count += 1
 
-        if count > 3:
+        if count > 5:
             break
