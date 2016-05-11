@@ -8,7 +8,7 @@ title = "오늘부터 우리는 (Me Gustas Tu)"
 """
 
 def get_melon_song_id(m_a_id, title):
-    url = "http://www.muse.com/album/detail.htm?albumId=%s"    %(str(m_a_id))
+    url = "http://www.muse.com/album/detail.htm?albumId=%s"%(str(m_a_id))
     res = requests.get(url)
     soup = BeautifulSoup(res.text, 'html.parser')
     song_list = list(soup.find_all("a", class_="btn btn_icon_detail"))

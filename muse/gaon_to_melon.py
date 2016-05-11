@@ -47,6 +47,7 @@ class LYRICS:
                 print("title:",t , "\tsong_id:", s_id)
                 return s_id
 
+
     def get_lyric(self,m_s_id):
         url = "http://www.melon.com/song/detail.htm?songId=%s"  %(str(m_s_id))
         print(url)
@@ -54,41 +55,74 @@ class LYRICS:
         soup = BeautifulSoup(res.text, 'html.parser')
         txt = soup.find("div", class_="lyric")
         line = list(str(txt).split("<br>"))
+        """
+        print("첫줄 :", line[0])
+        print(line[-2])
+        print("마지막줄 :", line[-1])
 
+        print("----------")
+        """
         rep = re.compile("(<div.+>|</div>|</?br>|\n)")  # 속성값 제거
         data = rep.sub(" ",str(txt))
-        x = data.strip()
-        return x
+        lyr = data.strip()
+
+
+        # 작사가 정보 추출
+        creaters = list(soup.find_all("div", class_="box_lyric"))
+        atist = str()
+        for c0 in creaters:
+            #print(c0.text,"\n...")
+            label = c0.find("dt").text
+            try:
+                atist = c0.find("dd", class_="atist").text
+            except:
+                atist = None
+            #print(label, "\t",atist)
+
+        result = {'artist':atist,'lyrics':lyr}
+        return result
+
 
 if __name__ == "__main__":
     manager = mongo_man.MONGO_MANAGER(db_type="mongo",db_name="song")
-    target = manager.db_connect["co_dp_song"]
+    target = manager.db_connect["top_song"]
 
     Lyric_man = LYRICS("melon")
 
     count = 0
-    for i in target.find({"lyrics":{"$exists":False}}):
-        id = i["_id"]
-        gaon_id = i["song_id"]
-        title = i["name"]
-        print(i)
+    try:
+        for i in target.find({"lyrics":{"$exists":False},"artist":{"$exists":False}}):
+            id = i["_id"]
+            gaon_id = i["song_id"]
+            title = i["name"]
+            print(i)
+            mel_id = Lyric_man.ga_mel(gaon_id)
+            print("mel album is ",mel_id)
+            mel_s_id = Lyric_man.get_melon_song_id(int(mel_id), title)
+            print("mel id is ", mel_s_id)
 
-        mel_id = Lyric_man.ga_mel(gaon_id)
-        print("mel album is ",mel_id)
-        mel_s_id = Lyric_man.get_melon_song_id(int(mel_id), title)
-        print("mel id is ", mel_s_id)
-        data = Lyric_man.get_lyric(mel_s_id)
+            if not mel_s_id: continue
 
-        if not data or data is "None":
-            print("----------------------\n\n\n\n")
-            print("NOT FOUND!!!!!!!")
-            print("----------------------\n\n\n\n")
-        else:
-            print("!!!", data)
-            target.update({"_id": id}, {"$set": {"lyrics": data}})
-            print("insert Success")
-            print("----------------------\n\n\n\n")
-            count += 1
+            data = Lyric_man.get_lyric(mel_s_id)
 
-        if count > 5:
-            break
+            artist,lyrics = data['artist'],data['lyrics']
+
+            if not lyrics or lyrics is "None":
+                print("----------------------\n\n\n\n")
+                print("NOT FOUND!!!!!!!")
+                print("----------------------\n\n\n\n")
+            else:
+                print("!!!", lyrics)
+                target.update({"_id": id}, {"$set": {"artist":artist,"lyrics": lyrics,'melon_id':mel_s_id}})
+                print("insert Success")
+                print("----------------------\n\n\n\n")
+                count += 1
+                time.sleep(20)
+
+            if count > 1000:
+                break
+
+
+    except Exception as e:
+        print(e)
+        print("The site block url.")

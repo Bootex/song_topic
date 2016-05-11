@@ -46,5 +46,5 @@ if __name__ == "__main__":
         for i in gaon_chart:
             row = dict(zip(b,i))
             row["year"],row["week"] = year,week
-            manager.insert("gaon_list",row)
+            #manager.insert("gaon_list",row)
             print(year,week,"  ",row)
