@@ -2,10 +2,13 @@ import requests
 import re, json
 from muse import mongo_man
 from bs4 import BeautifulSoup
-import time,random
+import time, random
 
+url="http://www.melon.com/song/detail.htm?songId="+str(8047229)
+result=requests.get(url)
+soup=BeautifulSoup(result.text)
+print(result.text)
 class LYRICS:
-
     def __init__(self,target):
         self.target = target
 
@@ -20,18 +23,18 @@ class LYRICS:
         res = requests.get(url=target_url)
         res_url = res.url
 
-        if self.target == "melon":
-            url_pattern = re.compile("(http|https)://.+=(?P<id>\d+)%?.+")
-            result = url_pattern.sub("\g<id>",res_url)
-            return result
+        print(res_url)
 
-        elif self.target == "bugs":
-            url_pattern = re.compile("(http|https)://.+/(?P<id>\d+)%?.+")
-            result = url_pattern.sub("\g<id>",res_url)
-            return result
+
+        if self.target == "melon":
+            url_pattern = re.compile("((http|https).+=|%.{0,2})")
+            result = url_pattern.sub("",res_url)
+            return (result)
+            #return result
 
         else:
             return "Bad type"
+
 
     def get_melon_song_id(self,m_a_id, title):
         url = "http://www.melon.com/album/detail.htm?albumId=%s"%(str(m_a_id))
@@ -39,12 +42,19 @@ class LYRICS:
         soup = BeautifulSoup(res.text, 'html.parser')
         song_list = list(soup.find_all("a", class_="btn btn_icon_detail"))
 
+        title_pat = re.compile('\W+')
+        title = title_pat.sub("",title).lower()
+
+        print(song_list)
         for a in song_list:
             t0 = a.find("span", class_="odd_span").text
             t = t0.split(" 상세정보 페이지 이동")[0]
-            if(t==title):
+
+            t = title_pat.sub("",t).lower()
+            print(t,"==",title,t in title, title in t)
+
+            if(t in title or title in t):
                 s_id = str(a).split("'")[1]
-                print("title:",t , "\tsong_id:", s_id)
                 return s_id
 
 
@@ -53,7 +63,7 @@ class LYRICS:
         print(url)
         res = requests.get(url)
         soup = BeautifulSoup(res.text, 'html.parser')
-        txt = soup.find("div", class_="lyric")
+        txt = soup.find("div", class_="lyric ws_normal")
         line = list(str(txt).split("<br>"))
         """
         print("첫줄 :", line[0])
@@ -62,8 +72,9 @@ class LYRICS:
 
         print("----------")
         """
-        rep = re.compile("(<div.+>|</div>|</?br>|\n)")  # 속성값 제거
-        data = rep.sub(" ",str(txt))
+        data = txt.text
+        #rep = re.compile("(<div.+>|</div.?>|</?br/?>|\\n|\\r)") # 속성값 제거
+        #data = rep.sub(" ",str(txt))
         lyr = data.strip()
 
 
@@ -104,13 +115,13 @@ if __name__ == "__main__":
             if not mel_s_id: continue
 
             data = Lyric_man.get_lyric(mel_s_id)
-
             artist,lyrics = data['artist'],data['lyrics']
 
             if not lyrics or lyrics is "None":
                 print("----------------------\n\n\n\n")
                 print("NOT FOUND!!!!!!!")
                 print("----------------------\n\n\n\n")
+
             else:
                 print("!!!", lyrics)
                 target.update({"_id": id}, {"$set": {"artist":artist,"lyrics": lyrics,'melon_id':mel_s_id}})
@@ -121,7 +132,6 @@ if __name__ == "__main__":
 
             if count > 1000:
                 break
-
 
     except Exception as e:
         print(e)

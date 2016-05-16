@@ -15,7 +15,7 @@ def get_lyric(m_s_id):
     """
     print("첫줄 :", line[0])
     print(line[-2])
-    print("마지막줄 :", line[-1])
+    print("마지막줄 :", lie[-1])
 
     print("----------")
     """
