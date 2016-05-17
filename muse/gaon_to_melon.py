@@ -63,7 +63,7 @@ class LYRICS:
         print(url)
         res = requests.get(url)
         soup = BeautifulSoup(res.text, 'html.parser')
-        txt = soup.find("div", class_="lyric ws_normal")
+        txt = soup.find("div", class_="lyric",id="d_video_summary")
         line = list(str(txt).split("<br>"))
         """
         print("첫줄 :", line[0])
@@ -72,11 +72,10 @@ class LYRICS:
 
         print("----------")
         """
-        data = txt.text
-        #rep = re.compile("(<div.+>|</div.?>|</?br/?>|\\n|\\r)") # 속성값 제거
-        #data = rep.sub(" ",str(txt))
-        lyr = data.strip()
 
+        rep = re.compile("(<div.+-->|</div.?>|</?br/?>)") # 속성값 제거
+        data = rep.sub(" ",str(txt))
+        lyr = data.strip()
 
         # 작사가 정보 추출
         creaters = list(soup.find_all("div", class_="box_lyric"))
@@ -93,7 +92,6 @@ class LYRICS:
         result = {'artist':atist,'lyrics':lyr}
         return result
 
-
 if __name__ == "__main__":
     manager = mongo_man.MONGO_MANAGER(db_type="mongo",db_name="song")
     target = manager.db_connect["top_song"]
@@ -102,7 +100,8 @@ if __name__ == "__main__":
 
     count = 0
     try:
-        for i in target.find({"lyrics":{"$exists":False},"artist":{"$exists":False}}):
+        for i in target.find({"lyrics":{"$exists":False},"artist":{"$exists":False},"count":{"$gte":15}}):
+        #for i in target.find({"melon_id":"3006873"}):
             id = i["_id"]
             gaon_id = i["song_id"]
             title = i["name"]
@@ -123,12 +122,15 @@ if __name__ == "__main__":
                 print("----------------------\n\n\n\n")
 
             else:
-                print("!!!", lyrics)
+                print("!!!", lyrics,len(lyrics))
+                if len(lyrics) <80:
+                    print("lyrics is cutted")
+                    continue
+
                 target.update({"_id": id}, {"$set": {"artist":artist,"lyrics": lyrics,'melon_id':mel_s_id}})
                 print("insert Success")
                 print("----------------------\n\n\n\n")
                 count += 1
-                time.sleep(20)
 
             if count > 1000:
                 break
