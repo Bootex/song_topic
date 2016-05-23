@@ -1,6 +1,6 @@
 import requests
 import re, json
-from muse import mongo_man
+from . import mongo_man
 from bs4 import BeautifulSoup
 import time, random
 
@@ -8,6 +8,8 @@ url="http://www.melon.com/song/detail.htm?songId="+str(8047229)
 result=requests.get(url)
 soup=BeautifulSoup(result.text)
 print(result.text)
+
+
 class LYRICS:
     def __init__(self,target):
         self.target = target
