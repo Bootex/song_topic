@@ -11,7 +11,7 @@ lema = str()
 
 for i in reader:
     s = twitter.pos(i[4],norm=True)
-    x = [i[0] for i in s if i[1] in ['Noun','Verb']]
+    x = [i[0] for i in s if i[1] in ['Noun','Verb','Adjective','Alpha'] and len(i[0])>1]
     print(i[4],"\n",x,"\n"," ".join(x),"\n")
 
     result = [seg for seg in i]
