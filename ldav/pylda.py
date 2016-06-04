@@ -59,7 +59,7 @@ def get_lda():
 
     print (lda.show_topics())
 
-    
+
 
     import matplotlib
     matplotlib.use('qt5agg')

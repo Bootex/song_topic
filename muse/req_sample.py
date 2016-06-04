@@ -16,7 +16,6 @@ def req_melon():
     return BeautifulSoup(req.text)
 
 
-
 #soup = req_melon()
 #print (soup.select_one("div.ellipsis"))
 
