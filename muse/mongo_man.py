@@ -3,7 +3,7 @@ from pymongo import MongoClient
 class MONGO_MANAGER:  # DB manage class
     def __init__(self, db_type, db_name):
         if db_type == "mongo":
-            client = MongoClient('mongodb://data.bootex.xyz:27017/')
+            client = MongoClient('mongodb://127.0.0.1:27017/')
             try:
                 self.db_connect = client[db_name]
                 self.db_type = "mongo"
@@ -36,7 +36,7 @@ if __name__ == "__main__":
     for week in week_set:
         if len(str(week)) == 1: week = "0"+ str(week)
 
-        req = rq.get("http://data.bootex.xyz:8000/seolab/%s/%s" % (year,str(week)))
+        req = rq.get("http://127.0.0.1:8000/seolab/%s/%s" % (year,str(week)))
 
         print(req.text)
         gaon_chart = req.json()
@@ -46,5 +46,5 @@ if __name__ == "__main__":
         for i in gaon_chart:
             row = dict(zip(b,i))
             row["year"],row["week"] = year,week
-            #manager.insert("gaon_list",row)
+            manager.insert("gaon_list",row)
             print(year,week,"  ",row)
