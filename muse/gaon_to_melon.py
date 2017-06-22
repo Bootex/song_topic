@@ -1,6 +1,6 @@
 import requests
 import re, json
-from . import mongo_man
+import mongo_man
 from bs4 import BeautifulSoup
 import time, random
 

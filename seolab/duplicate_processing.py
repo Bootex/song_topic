@@ -1,7 +1,10 @@
 from pymongo import MongoClient
-from muse.mongo_man import MONGO_MANAGER
+import sys
 
-client = MongoClient("mongodb://data.bootex.xyz:27017")
+sys.path.append('muse/')
+from mongo_man import MONGO_MANAGER
+
+client = MongoClient("mongodb://127.0.0.1:27017")
 
 db = client.song
 chart = db['gaon_list']

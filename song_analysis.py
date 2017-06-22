@@ -1,7 +1,7 @@
 from flask import Flask
 from seolab import gaon_chart
 from muse import gaon_to_melon
-from ldav import pylda
+#from ldav import pylda
 
 import json
 app = Flask(__name__)
@@ -36,7 +36,8 @@ def jso():
 
 @app.route("/ldav")
 def lda_view():
-    return pylda.get_lda()
+    return "Progressing"
+    #return pylda.get_lda()
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', debug=True, port=8000)

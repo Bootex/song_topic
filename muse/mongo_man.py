@@ -30,7 +30,7 @@ import requests as rq
 import json
 
 if __name__ == "__main__":
-    year,week_set = "2016", [i for i in range(1,15)]
+    year,week_set = "2017", [i for i in range(15,25)]
     manager = MONGO_MANAGER(db_type="mongo",db_name="song")
 
     for week in week_set:
