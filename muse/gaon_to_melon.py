@@ -1,13 +1,14 @@
 import requests
 import re, json
+import sys
+sys.path.append('muse')
 import mongo_man
 from bs4 import BeautifulSoup
 import time, random
 
-url="http://www.melon.com/song/detail.htm?songId="+str(8047229)
-result=requests.get(url)
-soup=BeautifulSoup(result.text)
-print(result.text)
+#url="http://www.melon.com/song/detail.htm?songId="+str(8047229)
+#result=requests.get(url)
+#soup=BeautifulSoup(result.text)
 
 
 class LYRICS:
@@ -47,7 +48,7 @@ class LYRICS:
         title_pat = re.compile('\W+')
         title = title_pat.sub("",title).lower()
 
-        print(song_list)
+        print(song_list,"??")
         for a in song_list:
             t0 = a.find("span", class_="odd_span").text
             t = t0.split(" 상세정보 페이지 이동")[0]
@@ -96,9 +97,9 @@ class LYRICS:
 
 if __name__ == "__main__":
     manager = mongo_man.MONGO_MANAGER(db_type="mongo",db_name="song")
-    target = manager.db_connect["top_song"]
+    target = manager.db_connect["dp_song"]
 
-    Lyric_man = LYRICS("melon")
+    Lyric_man = LYRICS("bugs")
 
     count = 0
     try:
@@ -140,3 +141,5 @@ if __name__ == "__main__":
     except Exception as e:
         print(e)
         print("The site block url.")
+
+    print(count)
