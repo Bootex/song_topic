@@ -1,4 +1,5 @@
 import requests as rq
+from db_manager import MONGO_MANAGER
 from .db_manager import MONGO_MANAGER
 import sys
 

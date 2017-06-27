@@ -1,6 +1,8 @@
 import requests
 import re, json
-import mongo_man
+import sys, os
+sys.path.append(os.getcwd())
+from db_manager import MONGO_MANAGER
 from bs4 import BeautifulSoup
 import time, random
 
@@ -95,14 +97,14 @@ class LYRICS:
         return result
 
 if __name__ == "__main__":
-    manager = mongo_man.MONGO_MANAGER(db_type="mongo",db_name="song")
+    manager = MONGO_MANAGER(db_type="mongo",db_name="song")
     target = manager.db_connect["top_song"]
 
     Lyric_man = LYRICS("melon")
 
     count = 0
     try:
-        for i in target.find({"lyrics":{"$exists":False},"artist":{"$exists":False},"count":{"$gte":15}}):
+        for i in target.find({"lyrics":{"$exists":False},"artist":{"$exists":False},"count":{"$gte":10}}):
         #for i in target.find({"melon_id":"3006873"}):
             id = i["_id"]
             gaon_id = i["song_id"]
