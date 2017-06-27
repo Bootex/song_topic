@@ -1,9 +1,17 @@
 import requests as rq
 from .db_manager import MONGO_MANAGER
+import sys
 
 if __name__ == "__main__":
-    year,week_set = "2017", [i for i in range(15,25)]
+
+    assert len(sys.argv) == 4
+
+    year, start_week, end_week = sys.argv[1], sys.argv[2],sys.argv[3]
+
+    week_set =  [i for i in range(int(start_week),int(end_week)+1)]
     manager = MONGO_MANAGER(db_type="mongo",db_name="song")
+    target_db = 'gaon_list'
+    cursor = manager.db_connect[target_db]
 
     for week in week_set:
         if len(str(week)) == 1: week = "0"+ str(week)
@@ -15,9 +23,12 @@ if __name__ == "__main__":
 
         b = ['name','singer','album','company','circulation','rank','play','song_id']
 
+
         for i in gaon_chart:
             row = dict(zip(b,i))
             row["year"],row["week"] = year,week
-            manager.find()
-            manager.insert("gaon_list",row)
             print(year,week,"  ",row)
+            if cursor.find_one({'year':year,'week':week,'song_id':row['song_id']}):
+                print('already exist')
+            else:
+                manager.insert("gaon_list",row)

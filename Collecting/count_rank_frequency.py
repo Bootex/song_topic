@@ -1,5 +1,9 @@
 from pymongo import MongoClient
-from .db_manager import MONGO_MANAGER
+import sys
+
+sys.path.append('.')
+sys.path.append('../')
+from db_manager import MONGO_MANAGER
 
 client = MongoClient("mongodb://127.0.0.1:27017")
 
