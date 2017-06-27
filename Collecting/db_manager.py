@@ -8,6 +8,7 @@ class MONGO_MANAGER:  # DB manage class
                 self.db_connect = client[db_name]
                 self.db_type = "mongo"
 
+
             except ConnectionRefusedError:
                 self.db_connect = None
                 self.db_state = False
@@ -20,31 +21,15 @@ class MONGO_MANAGER:  # DB manage class
 
     def insert(self,target,row):
         if self.db_connect is not None:
-            melon_list = self.db_connect[target]
-            melon_list.insert(row)
+            cursor = self.db_connect[target]
+            cursor.insert(row)
         else:
             print("DB connect error occur!")
 
+    def find(self,target,query):
+        if self.db_connect is not None:
+            cursor = self.db_connect[target]
+            return cursor.find(query)
+        else:
+            print("DB connect error occur!")
 
-import requests as rq
-import json
-
-if __name__ == "__main__":
-    year,week_set = "2017", [i for i in range(15,25)]
-    manager = MONGO_MANAGER(db_type="mongo",db_name="song")
-
-    for week in week_set:
-        if len(str(week)) == 1: week = "0"+ str(week)
-
-        req = rq.get("http://127.0.0.1:8000/seolab/%s/%s" % (year,str(week)))
-
-        print(req.text)
-        gaon_chart = req.json()
-
-        b = ['name','singer','album','company','circulation','rank','play','song_id']
-
-        for i in gaon_chart:
-            row = dict(zip(b,i))
-            row["year"],row["week"] = year,week
-            manager.insert("gaon_list",row)
-            print(year,week,"  ",row)

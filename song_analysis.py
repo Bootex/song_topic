@@ -1,9 +1,11 @@
-from flask import Flask
-from seolab import gaon_chart
-from muse import gaon_to_melon
-#from ldav import pylda
-
+# from ldav import pylda
 import json
+
+from flask import Flask
+
+from Collecting import gaon_to_melon
+from Collecting import rank_song
+
 app = Flask(__name__)
 
 
@@ -15,7 +17,8 @@ def hello_world():
 @app.route('/seolab/<year>/<week>')
 def se(year,week):
     if year and week:
-        result = gaon_chart.gaon_top_rank(year,week)
+
+        result = rank_song.gaon_top_rank(year, week)
         return json.dumps(result,ensure_ascii='False')
     else:
         return "error value"

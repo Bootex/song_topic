@@ -2,7 +2,8 @@ import requests
 from bs4 import BeautifulSoup
 
 
-def gaon_top_rank(year, week) :
+# Collect the ranked song from Gaon chart
+def gaon_top_rank(year, week):
     """
     # 샘플 리스트
     y_li = range(2010, 2016+1)       # y_li[5] = 2015
@@ -13,7 +14,7 @@ def gaon_top_rank(year, week) :
     print(year,"년도", week, "주차 가온차트 목록 데이터 수집중...")
     year = str(year)
     week = str(week)
-    url = "http://www.gaonchart.co.kr/main/section/chart/online.gaon?nationGbn=T&serviceGbn=ALL&targetTime=%s&hitYear=%s&termGbn=week"  %(week, year)
+    url = "http://www.gaonchart.co.kr/main/section/chart/online.gaon?nationGbn=T&serviceGbn=ALL&targetTime=%s&hitYear=%s&termGbn=week"  % (week, year)
     res = requests.get(url)
     #print (res.text)
 
