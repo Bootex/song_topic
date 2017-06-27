@@ -1,9 +1,4 @@
 .idea/
 *.swp
-<<<<<<< HEAD
 */__pycache__
 *.pyc
-=======
-*.pyc
-*/__pycache__
->>>>>>> de0af7e2594174342dab6361052b4e976fe45f65
