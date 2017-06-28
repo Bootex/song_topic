@@ -45,7 +45,7 @@ class LYRICS:
         title_pat = re.compile('\W+')
         title = title_pat.sub("",title).lower()
 
-        print(song_list)
+        #print(song_list)
         for a in song_list:
             t0 = a.find("span", class_="odd_span").text
             t = t0.split(" 상세정보 페이지 이동")[0]
