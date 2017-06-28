@@ -48,4 +48,4 @@ if __name__ == "__main__":
         print(e)
         print("The site block url.")
 
-    print("Collecting is done")
+    print("Total:",count,"\n Collecting is done")
