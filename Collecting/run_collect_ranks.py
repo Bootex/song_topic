@@ -1,7 +1,7 @@
 import requests as rq
 import os,sys
 sys.path.append(os.path.abspath(os.path.dirname(__file__)))
-from .db_manager import MONGO_MANAGER
+from db_manager import MONGO_MANAGER
 
 if __name__ == "__main__":
 

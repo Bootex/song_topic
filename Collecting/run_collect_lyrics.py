@@ -1,5 +1,5 @@
-from Collecting.db_manager import MONGO_MANAGER
-from Collecting.gaon_to_melon import LYRICS
+from db_manager import MONGO_MANAGER
+from gaon_to_melon import LYRICS
 
 if __name__ == "__main__":
     manager = MONGO_MANAGER(db_type="mongo",db_name="song")

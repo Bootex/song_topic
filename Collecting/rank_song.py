@@ -1,4 +1,5 @@
-
+import requests as rq
+from bs4 import BeautifulSoup
 
 # Collect the ranked song from Gaon chart
 def gaon_top_rank(year, week):
@@ -13,7 +14,7 @@ def gaon_top_rank(year, week):
     year = str(year)
     week = str(week)
     url = "http://www.gaonchart.co.kr/main/section/chart/online.gaon?nationGbn=T&serviceGbn=ALL&targetTime=%s&hitYear=%s&termGbn=week"  % (week, year)
-    res = requests.get(url)
+    res = rq.get(url)
     #print (res.text)
 
     soup = BeautifulSoup(res.text, 'html.parser')
