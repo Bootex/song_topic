@@ -1,6 +1,4 @@
 import requests as rq
-from db_manager import MONGO_MANAGER
-from .db_manager import MONGO_MANAGER
 import sys
 
 if __name__ == "__main__":

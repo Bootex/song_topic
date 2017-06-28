@@ -14,7 +14,7 @@ def hello_world():
     return 'Hello World!'
 
 
-@app.route('/seolab/<year>/<week>')
+@app.route('/gaon/<year>/<week>')
 def se(year,week):
     if year and week:
 
@@ -23,7 +23,7 @@ def se(year,week):
     else:
         return "error value"
 
-@app.route('/seolab/gaon_<ga_id>')
+@app.route('/gaon/gaon_<ga_id>')
 def get_melon_album(ga_id):
     try:
         result = gaon_to_melon.ga_mel(gaon_id=ga_id)
