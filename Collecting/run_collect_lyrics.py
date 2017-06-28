@@ -47,3 +47,5 @@ if __name__ == "__main__":
     except Exception as e:
         print(e)
         print("The site block url.")
+
+    print("Collecting is done")
