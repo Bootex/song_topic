@@ -1,4 +1,6 @@
 import sys
+from Collecting.db_manager import MONGO_MANAGER
+from pymongo import MongoClient
 
 sys.path.append('.')
 sys.path.append('../')

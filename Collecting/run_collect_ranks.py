@@ -1,5 +1,6 @@
 import requests as rq
 import sys
+from Collecting.db_manager import MONGO_MANAGER
 
 if __name__ == "__main__":
 
@@ -15,7 +16,7 @@ if __name__ == "__main__":
     for week in week_set:
         if len(str(week)) == 1: week = "0"+ str(week)
 
-        req = rq.get("http://127.0.0.1:8000/seolab/%s/%s" % (year,str(week)))
+        req = rq.get("http://127.0.0.1:8000/gaon/%s/%s" % (year,str(week)))
 
         print(req.text)
         gaon_chart = req.json()

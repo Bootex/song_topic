@@ -1,8 +1,6 @@
 import requests
-import re, json
-import sys, os
+import re
 from bs4 import BeautifulSoup
-import time, random
 
 url="http://www.melon.com/song/detail.htm?songId="+str(8047229)
 result=requests.get(url)
