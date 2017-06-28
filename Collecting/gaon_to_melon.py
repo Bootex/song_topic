@@ -1,12 +1,12 @@
 import requests
 import re
 from bs4 import BeautifulSoup
-
+'''
 url="http://www.melon.com/song/detail.htm?songId="+str(8047229)
 result=requests.get(url)
 soup=BeautifulSoup(result.text)
 print(result.text)
-
+'''
 
 class LYRICS:
     def __init__(self,target):
@@ -29,11 +29,10 @@ class LYRICS:
         if self.target == "melon":
             url_pattern = re.compile("((http|https).+=|%.{0,2})")
             result = url_pattern.sub("",res_url)
-            return (result)
-            #return result
+            return result
 
         else:
-            return "Bad type"
+            raise Exception("Bad type")
 
 
     def get_melon_song_id(self,m_a_id, title):
@@ -45,7 +44,7 @@ class LYRICS:
         title_pat = re.compile('\W+')
         title = title_pat.sub("",title).lower()
 
-        #print(song_list)
+        print(song_list)
         for a in song_list:
             t0 = a.find("span", class_="odd_span").text
             t = t0.split(" 상세정보 페이지 이동")[0]
