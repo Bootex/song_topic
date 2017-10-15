@@ -1,15 +1,22 @@
 from db_manager import MONGO_MANAGER
 from gaon_to_melon import LYRICS
+import time
+import random
 
 if __name__ == "__main__":
     manager = MONGO_MANAGER(db_type="mongo",db_name="song")
-    target = manager.db_connect["top_song"]
+    target = manager.db_connect["counted_song"]
 
     Lyric_man = LYRICS("melon")
 
     count = 0
     try:
-        for i in target.find({"lyrics":{"$exists":False},"artist":{"$exists":False},"count":{"$gte":10}}):
+        collection = target.find({"lyrics":{"$exists":False},"artist":{"$exists":False},"count":{"$gte":1}})
+        print(collection.count())
+        for step in range(int(random.random()*10)):
+            next(collection)
+
+        for i in collection:
         #for i in target.find({"melon_id":"3006873"}):
             id = i["_id"]
             gaon_id = i["song_id"]
@@ -43,6 +50,8 @@ if __name__ == "__main__":
 
             if count > 1000:
                 break
+
+            time.sleep(int(random.random()*10))
 
     except Exception as e:
         print(e)

@@ -38,7 +38,7 @@ class LYRICS:
 
     def get_melon_song_id(self,m_a_id, title):
         url = "http://www.melon.com/album/detail.htm?albumId=%s"%(str(m_a_id))
-        res = requests.get(url)
+        res = rq.get(url)
         soup = BeautifulSoup(res.text, 'html.parser')
         song_list = list(soup.find_all("a", class_="btn btn_icon_detail"))
 
@@ -49,8 +49,14 @@ class LYRICS:
         for a in song_list:
             t0 = a.find("span", class_="odd_span").text
             t = t0.split(" 상세정보 페이지 이동")[0]
+            t = re.sub('(\(|\<).+(\)|\>)','',t)
 
             t = title_pat.sub("",t).lower()
+            if 'feat' in t:
+                t = t.split('feat')[0]
+            if 'feat' in title:
+                title = title.split('feat')[0]
+
             print(t,"==",title,t in title, title in t)
 
             if(t in title or title in t):
@@ -61,7 +67,7 @@ class LYRICS:
     def get_lyric(self,m_s_id):
         url = "http://www.melon.com/song/detail.htm?songId=%s"  %(str(m_s_id))
         print(url)
-        res = requests.get(url)
+        res = rq.get(url)
         soup = BeautifulSoup(res.text, 'html.parser')
         txt = soup.find("div", class_="lyric",id="d_video_summary")
         line = list(str(txt).split("<br>"))

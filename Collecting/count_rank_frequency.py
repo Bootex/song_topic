@@ -1,11 +1,11 @@
 import sys
-from Collecting.db_manager import MONGO_MANAGER
+from db_manager import MONGO_MANAGER
 from pymongo import MongoClient
 
 sys.path.append('.')
 sys.path.append('../')
 
-client = MongoClient("mongodb://127.0.0.1:27017")
+client = MongoClient("mongodb://127.0.0.1:20177")
 
 db = client.song
 chart = db['gaon_list']
@@ -19,6 +19,7 @@ for song in chart.find():
     else :
         info = {'song_id':song['song_id'], 'count':1, 'name':song['name'], 'singer':song['singer'], 'album':song['album']}
         res.update({song['song_id'] : info})
+    print(song)
     total += 1
 
 manager = MONGO_MANAGER(db_type="mongo",db_name="song")

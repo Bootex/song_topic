@@ -21,11 +21,23 @@ def edit_distance(s1, s2):
         prev_row[:] = current_row[:]
     return prev_row[-1]
 
+
 class lyrics(object):
     '''
         Collecting lyrics of song matched gaon chart id from other sources.
-        sources:
-            melon, bugs, genie, Mnet Etc
+        call_stack:
+            match_id -> source_parser -> get_lyrics -> lyric_parser
+        methods:
+            match_id:
+                match id gaon to source site by comparing title
+                return lyric_url
+            get_lyric:
+                parse lyric from source site
+                return lyric
+        variables:
+            source:
+                source is the site to get lyric
+                melon, bugs, genie, Mnet Etc
     '''
     def __init__(self, source):
         self.source = source
@@ -42,9 +54,12 @@ class lyrics(object):
 
             for tag in song_tags:
                 parsed_span = tag.find('span', class_='odd_span').text.split(" 상세정보 페이지 이동")[0]
-                print(tag)
 
-                if edit_distance(parsed_span, title) < 3:
+                distance_threshold = 3
+                if len(title) < distance_threshold:
+                    distance_threshold = 1
+
+                if edit_distance(parsed_span, title) < distance_threshold:
                     _song_id = re.match("javascript:melon.link.goSongDetail\('(\d+)'\);",
                     tag.attrs['href']).group(1)
                     return "http://www.melon.com/song/detail.htm?songId=%s" % str(_song_id)
@@ -55,9 +70,15 @@ class lyrics(object):
             for tag in song_tags:
                 print("_------------")
                 parsed_title = tag.th.text.strip()
+                lyric_info = tag.find('a', class_="trackInfo")
+                #lyric_url = lyric_info['href']
 
-                if edit_distance(parsed_title, title) < 3:
-                    print(parsed_title)
+                distance_threshold = 3
+                if len(title) < distance_threshold:
+                    distance_threshold = 1
+
+                if edit_distance(parsed_title, title) < distance_threshold:
+                    #print(parsed_title)
 
                     lyric_info = tag.find('a', class_="trackInfo")
                     print(title, tag.th.text.strip())
@@ -92,23 +113,27 @@ class lyrics(object):
             check_lyric_exist = _soup.find("div", class_="lyric_none")
             if bool(check_lyric_exist):
                 print(lyric_url, "Not exist")
-                return None
+                raise ValueError("No lyrics")
 
             _txt = _soup.find("div", class_="lyric", id="d_video_summary")
             try:
-                _lyrics = re.sub("<br>|<\\br>|\t",'',_txt.text)
+                _lyrics = re.sub("<br>|<\\br>|\t",' ',_txt.text)
             except AttributeError as e:
                 print("Attribue error", lyric_url, e)
                 return None
-            return _lyrics
+            return _lyrics.strip()
 
         def parse_bugs_lyrics(lyric_url):
             _res = req.get(lyric_url)
             _soup = BeautifulSoup(_res.text, 'html.parser')
+            check_lyric_exist = _soup.find("p", class_="comingsoon")
+            if bool(check_lyric_exist):
+                print(lyric_url, "Not exist")
+                raise ValueError("No lyrics")
             lyric_tag = _soup.select_one("div.lyricsContainer")
             dusted_lyric = lyric_tag.xmp.text
             lyric = " ".join([re.sub('\r','',line) for line in dusted_lyric.split('\n')])
-            return lyric
+            return lyric.strip()
 
         lyric_closers = {
                     'melon': parse_melon_lyrics,
